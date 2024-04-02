@@ -6,13 +6,19 @@ app = Flask(__name__)
 app.debug = True
 CORS(app)
 
-def generate_random_numbers(min_value, max_value, count):
-    return [round(random.uniform(min_value, max_value), 2) for _ in range(count)]
+def read_temperature_data():
+    return [round(random.uniform(34, 36), 2) for _ in range(5)]
+
+def read_humditiy_data():
+    return [round(random.uniform(20, 70), 2) for _ in range(5)]
+
+def read_moisture_data():
+    return [random.choice([0,1]) for _ in range(5)]
 
 def generate_sensor_data():
-    temperature = generate_random_numbers(0, 100, 5)
-    humidity = generate_random_numbers(0, 100, 5)
-    moisture = generate_random_numbers(0, 100, 5)
+    temperature = read_temperature_data()
+    humidity = read_humditiy_data()
+    moisture = read_moisture_data()
     return [temperature, humidity, moisture]
 
 @app.route('/sensor_data', methods=['GET'])
@@ -22,3 +28,5 @@ def get_sensor_data():
 
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5000)
+
+

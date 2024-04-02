@@ -5,10 +5,12 @@ import fetchSensorData from "./fetchSensorData";
 import { ScrollView } from "react-native";
 
 const FetchingData = () => {
+  const threshold = [35, 60, 0.99];
+
   const [sensorData, setSensorData] = useState({
-    temperature: [10, 10, 10, 10, 10],
-    humidity: [10, 10, 10, 10, 10],
-    moisture: [10, 10, 10, 10, 10],
+    temperature: [30, 30, 30, 30, 30],
+    humidity: [50, 50, 50, 50, 50],
+    moisture: [0, 0, 0, 0, 0],
   });
   let i = 0;
 
@@ -21,7 +23,7 @@ const FetchingData = () => {
         console.log("Out of limit");
         clearInterval(fetchDataInterval);
       }
-    }, 2000);
+    }, 5000);
 
     return () => clearInterval(fetchDataInterval);
   }, []);
@@ -29,7 +31,7 @@ const FetchingData = () => {
   const fetchData = async () => {
     try {
       const newData = await fetchSensorData("sensor_data");
-      console.log(newData, "Sensor Data");
+      console.log(newData, "- Sensor Data");
       if (newData && newData.length >= 3) {
         setSensorData({
           temperature: newData[0],
@@ -62,9 +64,10 @@ const FetchingData = () => {
             PlantName
           </Text>
         </View>
-        {Object.entries(sensorData).map(([key, data]) => (
+        {Object.entries(sensorData).map(([key, data], index) => (
           <LineChartView
             key={key}
+            threshold={threshold[index]}
             Data={data}
             legend={key.charAt(0).toUpperCase() + key.slice(1)}
           />
